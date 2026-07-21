@@ -11,8 +11,8 @@
         "module": "commonjs",
         "baseUrl": "src",
         "paths": {
-            "@code/*": [
-                "day4/*"
+"@code/*": [
+                "golden/*"
             ]
         }
     },

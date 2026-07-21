@@ -42,32 +42,22 @@ OUT OF DATE.  We have quite a few more.  need to update
 
 ### How It Works
 
-Make sure you have [Node.js](https://nodejs.org/en/) and yarn installed: `npm install --global yarn`
+Make sure you have [Node.js](https://nodejs.org/en/) installed.
 
 clone the repo and install the dependencies
 
 ```bash
-yarn install
+npm install
 ```
 
-edit the `ligma.config.js` file
-```javascript
-module.exports = {
-    dsa: [
-        "InsertionSort",
-        "MergeSort",
-        "Queue",
-        "Stack",
-        "QuickSort",
-        "DijkstraList",
-        "PrimsList",
-    ],
-}
+pick 3 random katas (will not repeat from previous day):
+```bash
+npm run pick
 ```
 
 create a day of katas, this will use the list in the `ligma.config.js`.
 ```bash
-yarn generate
+npm run generate
 ```
 
 this will progressively create folders named
@@ -78,13 +68,13 @@ src/day2
 ...
 ```
 
-`yarn generate` will also update the `tsconfig.json` and `jest.config` to point
+`npm run generate` will also update the `tsconfig.json` and `jest.config` to point
 the latest `day` folder via tspaths.  This allows us to avoid updating anything
 for testing each day.
 
 #### Testing
 ```
-yarn test
+npm test
 ```
 
 I have yet to create a testing strategy for next sets of algorithms, but we

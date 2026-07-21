@@ -225,6 +225,13 @@ module.exports = {
         return: "WeightedAdjacencyList | null",
     },
 
+    Kruskals: {
+        type: "fn",
+        fn: "kruskals",
+        args: "list: WeightedAdjacencyList",
+        return: "WeightedAdjacencyList | null",
+    },
+
     BinarySearchList: {
         type: "fn",
         fn: "bs_list",
@@ -314,6 +321,209 @@ module.exports = {
         fn: "bfs",
         args: "graph: WeightedAdjacencyMatrix, source: number, needle: number",
         return: "number[] | null",
+    },
+
+    CoinChange: {
+        type: "fn",
+        fn: "coin_change",
+        args: "amount: number, coins: number[]",
+        "return": "number",
+    },
+
+    DailyTemperatures: {
+        type: "fn",
+        fn: "daily_temperatures",
+        args: "temperatures: number[]",
+        "return": "number[]",
+    },
+
+    FenwickTree: {
+        type: "class",
+        methods: [{
+            name: "add",
+            args: "idx: number, delta: number",
+            return: "void",
+        }, {
+            name: "sum",
+            args: "idx: number",
+            return: "number",
+        }],
+        properties: [{
+            name: "length",
+            type: "number",
+            scope: "public",
+        }],
+    },
+
+    FindMinRotatedSorted: {
+        type: "fn",
+        fn: "find_min_rotated",
+        args: "nums: number[]",
+        "return": "number",
+    },
+
+    HasCycle: {
+        type: "fn",
+        fn: "has_cycle",
+        args: "head: ListNode<number> | null",
+        "return": "boolean",
+    },
+
+    HashSet: {
+        type: "class",
+        methods: [{
+            name: "add",
+            args: "key: number",
+            return: "void",
+        }, {
+            name: "remove",
+            args: "key: number",
+            return: "void",
+        }, {
+            name: "contains",
+            args: "key: number",
+            return: "boolean",
+        }],
+        properties: [{
+            name: "length",
+            type: "number",
+            scope: "public",
+        }],
+    },
+
+    Knapsack: {
+        type: "fn",
+        fn: "knapsack",
+        args: "capacity: number, weights: number[], values: number[]",
+        "return": "number",
+    },
+
+    KthLargest: {
+        type: "fn",
+        fn: "kth_largest",
+        args: "nums: number[], k: number",
+        "return": "number",
+    },
+
+    LongestCommonSubsequence: {
+        type: "fn",
+        fn: "longest_common_subsequence",
+        args: "a: string, b: string",
+        "return": "number",
+    },
+
+    MedianFinder: {
+        type: "class",
+        methods: [{
+            name: "insert",
+            args: "value: number",
+            return: "void",
+        }, {
+            name: "getMedian",
+            args: "",
+            return: "number",
+        }],
+        properties: [{
+            name: "length",
+            type: "number",
+            scope: "public",
+        }],
+    },
+
+    MergeRanges: {
+        type: "fn",
+        fn: "merge_ranges",
+        args: "intervals: [number, number][]",
+        "return": "[number, number][]",
+    },
+
+    SegmentTree: {
+        type: "class",
+        methods: [{
+            name: "update",
+            args: "idx: number, value: number",
+            return: "void",
+        }, {
+            name: "query",
+            args: "left: number, right: number",
+            return: "number",
+        }],
+        properties: [{
+            name: "length",
+            type: "number",
+            scope: "public",
+        }],
+    },
+
+    SlidingWindowMax: {
+        type: "fn",
+        fn: "sliding_window_max",
+        args: "nums: number[], k: number",
+        "return": "number[]",
+    },
+
+    Subsets: {
+        type: "fn",
+        fn: "subsets",
+        args: "nums: number[]",
+        "return": "number[][]",
+    },
+
+    TopologicalSort: {
+        type: "fn",
+        fn: "topological_sort",
+        args: "numNodes: number, edges: [number, number][]",
+        "return": "number[]",
+    },
+
+    TwoSumSorted: {
+        type: "fn",
+        fn: "two_sum_sorted",
+        args: "nums: number[], target: number",
+        "return": "[number, number]",
+    },
+
+    UnionFind: {
+        type: "class",
+        methods: [{
+            name: "find",
+            args: "p: number",
+            return: "number",
+        }, {
+            name: "union",
+            args: "p: number, q: number",
+            return: "void",
+        }, {
+            name: "connected",
+            args: "p: number, q: number",
+            return: "boolean",
+        }],
+        properties: [{
+            name: "length",
+            type: "number",
+            scope: "public",
+        }],
+    },
+
+    InvertTree: {
+        type: "fn",
+        fn: "invert_tree",
+        args: "root: BinaryNode<number> | null",
+        "return": "BinaryNode<number> | null",
+    },
+
+    KadanesAlgorithm: {
+        type: "fn",
+        fn: "max_subarray",
+        args: "nums: number[]",
+        "return": "number",
+    },
+
+    KMP: {
+        type: "fn",
+        fn: "kmp_search",
+        args: "text: string, pattern: string",
+        "return": "number",
     },
 };
 
