@@ -3,5 +3,6 @@ node_modules
 dist
 stats.json
 .last-katas.json
+.review-data.json
 
 

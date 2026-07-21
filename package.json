@@ -20,6 +20,9 @@
         "prettier": "prettier --write ./src",
         "generate": "node ./scripts/generate.js",
         "pick": "node ./scripts/pick.js",
+        "review": "node ./scripts/review.js",
+        "complete-day": "node ./scripts/complete-day.js",
+        "stats": "node ./scripts/stats.js",
         "day": "echo src/day1"
     },
     "devDependencies": {
