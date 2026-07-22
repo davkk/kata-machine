@@ -7,7 +7,7 @@ function read_json(file, fallback) {
     try { return JSON.parse(fs.readFileSync(file, "utf-8")); }
     catch { return fallback; }
 }
-const config = { dsa: read_json(ACTIVE_FILE, []) };
+const katas = read_json(ACTIVE_FILE, []);
 
 const GOLDEN_PATH = path.join(__dirname, "..", "golden");
 
@@ -35,8 +35,6 @@ function get_description(name) {
     }
 }
 
-
-
 const sessions_path = path.join(__dirname, "..", "sessions");
 let session = 1;
 
@@ -58,7 +56,6 @@ try {
 
 const session_name = `session${session}`;
 const session_path = path.join(sessions_path, session_name);
-const relative_session_path = path.relative(process.cwd(), session_path);
 try { fs.unlinkSync(session_path); } catch (e) { }
 try { fs.mkdirSync(session_path); } catch (e) { }
 
@@ -131,7 +128,7 @@ function create_function(name, item) {
     fs.writeFileSync(path.join(session_path, `${name}.ts`), parts.join("\n") + "\n");
 }
 
-config.dsa.forEach(ds => {
+katas.forEach(ds => {
     const item = dsa[ds];
     if (!item) {
         throw new Error(`algorithm ${ds} could not be found`);
@@ -143,8 +140,4 @@ config.dsa.forEach(ds => {
     }
 });
 
-const align = require("./align-configs");
-align.jest(session_name);
-align.ts_config(session_name);
-align.package_json(config, relative_session_path);
-align.stats(config, session_path);
+

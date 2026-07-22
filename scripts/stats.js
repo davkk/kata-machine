@@ -4,7 +4,8 @@ const dsa = require("./dsa");
 
 const REVIEW_FILE = path.join(__dirname, "..", ".review-data.json");
 const ACTIVE_FILE = path.join(__dirname, "..", ".active.json");
-const STATS_FILE = path.join(__dirname, "..", "stats.json");
+const STATS_FILE = path.join(__dirname, "..", ".stats.json");
+const DAILY_AVG_FILE = path.join(__dirname, "..", ".daily-averages.json");
 
 function read_json(file, fallback) {
     try { return JSON.parse(fs.readFileSync(file, "utf-8")); }
@@ -130,3 +131,22 @@ for (const k of active) {
 console.log();
 
 console.log(`Session count: ${sorted_dates.length}`);
+
+// --- Daily average trend ---
+
+const daily_avgs = read_json(DAILY_AVG_FILE, []).sort((a, b) => a.date.localeCompare(b.date));
+if (daily_avgs.length > 0) {
+    console.log("\nDaily average scores:");
+    const max_bar = 20;
+    const max_avg = Math.max(...daily_avgs.map(d => d.avg), 5);
+    for (const d of daily_avgs) {
+        const bar = "█".repeat(Math.round(d.avg / 5 * max_bar));
+        const label = d.avg === 5 ? "5.00" : d.avg.toFixed(2);
+        console.log(`  ${d.date}  ${label} ${bar}  (${d.count} reviews)`);
+    }
+    const all_avgs = daily_avgs.map(d => d.avg);
+    const trend = all_avgs.length > 1
+        ? (all_avgs[all_avgs.length - 1] - all_avgs[0]).toFixed(2)
+        : "N/A";
+    console.log(`  Trend: ${trend} from first to last`);
+}

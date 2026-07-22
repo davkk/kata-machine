@@ -44,14 +44,6 @@ function write_history(picks) {
 }
 
 function read_reviews() {
-    return read_json(REVIEW_FILE, {});
-}
-
-function write_reviews(reviews) {
-    write_json(REVIEW_FILE, reviews);
-}
-
-function write_active(picks) {
     write_json(ACTIVE_FILE, picks);
 }
 

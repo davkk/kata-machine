@@ -4,6 +4,7 @@ const { sm2 } = require("./sm2");
 
 const REVIEW_FILE = path.join(__dirname, "..", ".review-data.json");
 const ACTIVE_FILE = path.join(__dirname, "..", ".active.json");
+const DAILY_AVG_FILE = path.join(__dirname, "..", ".daily-averages.json");
 
 function read_json(file, fallback) {
     try { return JSON.parse(fs.readFileSync(file, "utf-8")); }
@@ -25,7 +26,7 @@ function get_active_katas() {
 async function main() {
     const katas = get_active_katas();
     if (katas.length === 0) {
-        console.log("No active katas found in ligma.config.js.");
+        console.log("No active katas found in .active.json.");
         return;
     }
 
@@ -75,6 +76,22 @@ async function main() {
 
     write_json(REVIEW_FILE, reviews);
     console.log(`\nRecorded reviews for: ${updated.join(", ") || "none"}`);
+
+    // Track daily average
+    if (updated.length > 0) {
+        const today_scores = updated
+            .map(k => reviews[k].reviews.findLast(r => r.date === today)?.score)
+            .filter(s => s !== undefined);
+        if (today_scores.length > 0) {
+            const avg = today_scores.reduce((a, b) => a + b, 0) / today_scores.length;
+            const daily = read_json(DAILY_AVG_FILE, []);
+            const existing = daily.findIndex(d => d.date === today);
+            const entry = { date: today, avg: Math.round(avg * 100) / 100, count: today_scores.length };
+            if (existing >= 0) daily[existing] = entry;
+            else daily.push(entry);
+            write_json(DAILY_AVG_FILE, daily);
+        }
+    }
 }
 
 main().catch(console.error);

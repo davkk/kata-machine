@@ -5,6 +5,8 @@ const { sm2 } = require("./sm2");
 
 const REVIEW_FILE = path.join(__dirname, "..", ".review-data.json");
 const ACTIVE_FILE = path.join(__dirname, "..", ".active.json");
+const DAILY_AVG_FILE = path.join(__dirname, "..", ".daily-averages.json");
+const SESSION_DIR = path.join(__dirname, "..", "sessions", "session1");
 
 function read_json(file, fallback) {
     try { return JSON.parse(fs.readFileSync(file, "utf-8")); }
@@ -23,11 +25,14 @@ function get_active_katas() {
     return read_json(ACTIVE_FILE, []);
 }
 
-function run_jest(katas) {
+function run_tests(katas) {
     if (katas.length === 0) return true;
     try {
         console.log("Running tests...\n");
-        execSync(`npx jest ${katas.join(" ")}`, { stdio: "inherit" });
+        const testPattern = katas.map(k => `src/__tests__/${k}.ts`).join(" ");
+        execSync(
+            `npx vitest run --reporter dot --config vitest.config.ts ${testPattern}`,
+            { stdio: "inherit", timeout: 120000, env: { ...process.env, TEST_TARGET: SESSION_DIR } });
         return true;
     } catch {
         return false;
@@ -37,13 +42,13 @@ function run_jest(katas) {
 async function main() {
     const katas = get_active_katas();
     if (katas.length === 0) {
-        console.log("No active katas found in ligma.config.js.");
+        console.log("No active katas found in .active.json.");
         return;
     }
 
     console.log(`Active katas: ${katas.join(", ")}\n`);
 
-    const passed = run_jest(katas);
+    const passed = run_tests(katas);
     if (!passed) {
         console.log("\nSome tests failed. You can still rate your performance.\n");
     }
@@ -94,6 +99,21 @@ async function main() {
 
     write_json(REVIEW_FILE, reviews);
     console.log(`\nRecorded reviews for: ${updated.join(", ") || "none"}`);
+
+    if (updated.length > 0) {
+        const today_scores = updated
+            .map(k => reviews[k].reviews.findLast(r => r.date === today)?.score)
+            .filter(s => s !== undefined);
+        if (today_scores.length > 0) {
+            const avg = today_scores.reduce((a, b) => a + b, 0) / today_scores.length;
+            const daily = read_json(DAILY_AVG_FILE, []);
+            const existing = daily.findIndex(d => d.date === today);
+            const entry = { date: today, avg: Math.round(avg * 100) / 100, count: today_scores.length };
+            if (existing >= 0) daily[existing] = entry;
+            else daily.push(entry);
+            write_json(DAILY_AVG_FILE, daily);
+        }
+    }
 }
 
 main().catch(console.error);

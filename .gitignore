@@ -1,6 +1,7 @@
 node_modules
 dist
-stats.json
+.stats.json
 .last-katas.json
 .review-data.json
 .active.json
+.daily-averages.json
