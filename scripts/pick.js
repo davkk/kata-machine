@@ -4,12 +4,23 @@ const dsa = require("./dsa");
 
 const HISTORY_FILE = path.join(__dirname, "..", ".last-katas.json");
 const REVIEW_FILE = path.join(__dirname, "..", ".review-data.json");
-const CONFIG_FILE = path.join(__dirname, "..", "ligma.config.js");
+const ACTIVE_FILE = path.join(__dirname, "..", ".active.json");
 
 const all_katas = Object.keys(dsa).sort();
 
 const count_index = process.argv.indexOf("--count");
 const PICK_COUNT = count_index !== -1 ? parseInt(process.argv[count_index + 1], 10) || 5 : 5;
+
+const katas_index = process.argv.indexOf("--katas");
+const KATAS_LIST = katas_index !== -1 ? process.argv[katas_index + 1].split(",").map(s => s.trim()).filter(Boolean) : null;
+
+if (KATAS_LIST) {
+    const unknown = KATAS_LIST.filter(k => !dsa[k]);
+    if (unknown.length > 0) {
+        console.error(`Unknown katas: ${unknown.join(", ")}`);
+        process.exit(1);
+    }
+}
 
 function read_json(file, fallback) {
     try { return JSON.parse(fs.readFileSync(file, "utf-8")); }
@@ -40,20 +51,20 @@ function write_reviews(reviews) {
     write_json(REVIEW_FILE, reviews);
 }
 
-function write_config(picks) {
-    const lines = all_katas.map(k => `        ${picks.includes(k) ? "" : "// "}"${k}",`);
-    const content = `module.exports = {
-    dsa: [
-${lines.join("\n")}
-    ],
-}
-`;
-    fs.writeFileSync(CONFIG_FILE, content);
+function write_active(picks) {
+    write_json(ACTIVE_FILE, picks);
 }
 
 const today = today_str();
 const reviews = read_reviews();
 const previous = read_history();
+
+if (KATAS_LIST) {
+    write_active(KATAS_LIST);
+    write_history(KATAS_LIST);
+    console.log(`Picked ${KATAS_LIST.length} katas: ${KATAS_LIST.join(", ")}`);
+    process.exit(0);
+}
 
 const due = all_katas.filter(k => {
     const r = reviews[k];
@@ -86,7 +97,7 @@ if (picks.length < PICK_COUNT) {
     picks = picks.concat(fallback.slice(0, PICK_COUNT - picks.length));
 }
 
-write_config(picks);
+write_active(picks);
 write_history(picks);
 
 console.log(`Picked ${picks.length} katas: ${picks.join(", ")}`);

@@ -1,7 +1,13 @@
 const fs = require("fs");
 const path = require("path");
-const config = require("../ligma.config");
 const dsa = require("./dsa");
+
+const ACTIVE_FILE = path.join(__dirname, "..", ".active.json");
+function read_json(file, fallback) {
+    try { return JSON.parse(fs.readFileSync(file, "utf-8")); }
+    catch { return fallback; }
+}
+const config = { dsa: read_json(ACTIVE_FILE, []) };
 
 const src_path = path.join(__dirname, "..", "src");
 let day = 1;

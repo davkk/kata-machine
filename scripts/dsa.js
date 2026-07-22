@@ -302,6 +302,28 @@ module.exports = {
         return: "boolean",
     },
 
+    BinarySearchTree: {
+        type: "class",
+        methods: [{
+            name: "insert",
+            args: "value: number",
+            return: "void",
+        }, {
+            name: "delete",
+            args: "value: number",
+            return: "void",
+        }, {
+            name: "find",
+            args: "value: number",
+            return: "BinaryNode<number> | null",
+        }],
+        properties: [{
+            name: "length",
+            type: "number",
+            scope: "public",
+        }],
+    },
+
     DFSGraphList: {
         type: "fn",
         fn: "dfs",
@@ -524,6 +546,20 @@ module.exports = {
         fn: "kmp_search",
         args: "text: string, pattern: string",
         "return": "number",
+    },
+
+    Permutations: {
+        type: "fn",
+        fn: "permutations",
+        args: "nums: number[]",
+        "return": "number[][]",
+    },
+
+    Combinations: {
+        type: "fn",
+        fn: "combinations",
+        args: "n: number, k: number",
+        "return": "number[][]",
     },
 };
 

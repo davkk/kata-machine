@@ -1,8 +1,8 @@
 node_modules
-./ligma.config.js
 dist
 stats.json
 .last-katas.json
 .review-data.json
+.active.json
 
 

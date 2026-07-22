@@ -1,9 +1,10 @@
 const { execSync } = require("child_process");
 const fs = require("fs");
 const path = require("path");
+const { sm2 } = require("./sm2");
 
 const REVIEW_FILE = path.join(__dirname, "..", ".review-data.json");
-const CONFIG_FILE = path.join(__dirname, "..", "ligma.config.js");
+const ACTIVE_FILE = path.join(__dirname, "..", ".active.json");
 
 function read_json(file, fallback) {
     try { return JSON.parse(fs.readFileSync(file, "utf-8")); }
@@ -18,35 +19,8 @@ function today_str() {
     return new Date().toISOString().split("T")[0];
 }
 
-function sm2(score, prev) {
-    const ef = prev ? prev.easiness : 2.5;
-    const interval = prev ? prev.interval : 0;
-    let new_ef, new_interval;
-    if (score >= 3) {
-        if (interval === 0) new_interval = 1;
-        else if (interval === 1) new_interval = 6;
-        else new_interval = Math.round(interval * ef);
-        new_ef = Math.max(1.3, ef + (0.1 - (5 - score) * (0.08 + (5 - score) * 0.02)));
-    } else {
-        new_interval = 1;
-        new_ef = Math.max(1.3, ef);
-    }
-    const next = new Date();
-    next.setDate(next.getDate() + new_interval);
-    return {
-        interval: new_interval,
-        easiness: Math.round(new_ef * 100) / 100,
-        next_review: next.toISOString().split("T")[0],
-    };
-}
-
 function get_active_katas() {
-    try {
-        const config = require(CONFIG_FILE);
-        return config.dsa || [];
-    } catch {
-        return [];
-    }
+    return read_json(ACTIVE_FILE, []);
 }
 
 function run_jest(katas) {
