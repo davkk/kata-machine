@@ -111,6 +111,22 @@ module.exports = {
             name: "length",
             type: "number",
             scope: "public",
+        }, {
+            name: "capacity",
+            type: "number",
+            scope: "private",
+        }, {
+            name: "head",
+            type: "number",
+            scope: "private",
+        }, {
+            name: "tail",
+            type: "number",
+            scope: "private",
+        }, {
+            name: "buffer",
+            type: "(T | undefined)[]",
+            scope: "private",
         }]
     },
 

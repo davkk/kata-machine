@@ -80,7 +80,7 @@ due.sort((a, b) => {
         return (ra.easiness || 2.5) - (rb.easiness || 2.5);
     }
     return (ra.next_review || "") < (rb.next_review || "") ? -1 : 1;
-});
+}).sort(() => Math.random() - 0.5);
 
 const pool = due.filter(k => !previous.includes(k));
 let picks = pool.slice(0, PICK_COUNT);

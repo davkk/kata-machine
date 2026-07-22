@@ -1,12 +1,12 @@
 const fs = require("fs");
 const path = require("path");
 
-const src_path = path.join(__dirname, "..", "src");
+const sessions_path = path.join(__dirname, "..", "sessions");
 
 try {
-    fs.readdirSync(src_path).
+    fs.readdirSync(sessions_path).
         filter(f => {
-            if (f.includes("day")) {
+            if (f.includes("session")) {
                 console.log("found", f);
                 return true;
             }
@@ -14,7 +14,7 @@ try {
             return false;
         }).
         forEach(f => {
-            const file = path.join(src_path, f);
+            const file = path.join(sessions_path, f);
             console.log("deleting", file);
             fs.rmSync(file, {
                 recursive: true,

@@ -13,7 +13,7 @@ npm install
 ```bash
 npm run pick              # pick 5 katas (SR-prioritized)
 npm run generate          # create stub files
-# ... solve the katas in src/day{...}/
+# ... solve the katas in src/session{...}/
 npm run complete-day      # run tests + self-assess (0-5)
 ```
 
@@ -24,7 +24,7 @@ npm run complete-day      # run tests + self-assess (0-5)
 | `npm run pick` | Pick 5 SR-prioritized katas (no consecutive-day repeat) |
 | `npm run pick -- --count 3` | Pick N katas instead of 5 |
 | `npm run pick -- --katas BubbleSort,QuickSort` | Pick specific katas |
-| `npm run generate` | Create stub files in `src/day{...}/` |
+| `npm run generate` | Create stub files in `src/session{...}/` |
 | `npm run complete-day` | Run jest on active katas, then prompt 0-5 per kata |
 | `npm run review` | Just self-assess (no tests) |
 | `npm run stats` | Show progress: reviewed, due, streak, buckets |

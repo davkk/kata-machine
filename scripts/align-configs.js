@@ -22,10 +22,10 @@ module.exports.stats = function(config, day_path) {
         JSON.stringify(stats, null, 4));
 }
 
-module.exports.package_json = function(config, day_path) {
+module.exports.package_json = function(config, session_path) {
     const package_json = require("../package.json");
-    package_json.scripts.test = `jest ${config.dsa.join(" ")}`;
-    package_json.scripts.day = `echo ${day_path}`;
+    package_json.scripts.test = `node ./scripts/test.js ${session_path}`;
+    package_json.scripts.session = `echo ${session_path}`;
 
     fs.writeFileSync(
         path.join(__dirname, "..", "package.json"),
@@ -34,7 +34,7 @@ module.exports.package_json = function(config, day_path) {
 
 module.exports.ts_config = function(set_to) {
     const ts_config = require("../tsconfig.json");
-    ts_config.compilerOptions.paths["@code/*"] = [`${set_to}/*`];
+    ts_config.compilerOptions.paths["@code/*"] = [`../sessions/${set_to}/*`];
 
     fs.writeFileSync(
         path.join(__dirname, "..", "tsconfig.json"),
@@ -42,11 +42,6 @@ module.exports.ts_config = function(set_to) {
 }
 
 module.exports.jest = function(set_to) {
-    const jest = require("../.jest.config.json");
-    jest.moduleNameMapper["@code/(.*)"] = [`<rootDir>/src/${set_to}/$1`];
-
-    fs.writeFileSync(
-        path.join(__dirname, "..", ".jest.config.json"),
-        JSON.stringify(jest, null, 4));
+    // No-op: vitest resolves @code/* via vitest.config.ts and TEST_TARGET env var
 }
 
