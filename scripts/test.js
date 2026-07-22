@@ -4,15 +4,15 @@ const path = require("path");
 
 const targetDir = path.resolve(process.argv[2] || "sessions/session1");
 
-const files = fs.readdirSync(targetDir)
+const testPattern = fs.readdirSync(targetDir)
     .filter(f => f.endsWith(".ts"))
-    .map(f => f.replace(".ts", ""));
+    .map(f => `src/__tests__/${f.replace(".ts", "")}.ts`);
 
-if (files.length === 0) process.exit(1);
+if (testPattern.length === 0) process.exit(1);
 
-const testPattern = files.map(f => `src/__tests__/${f}.ts`).join(" ");
 try {
-    execSync(`npx vitest run --reporter verbose --config vitest.config.ts ${testPattern}`,
+    execSync(
+        `npx vitest run --reporter dot --config vitest.config.ts ${testPattern.join(" ")}`,
         { stdio: "inherit", timeout: 120000, env: { ...process.env, TEST_TARGET: targetDir } });
 } catch {
     process.exit(1);

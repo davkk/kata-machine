@@ -1,1 +1,0 @@
-{"clearMocks":true,"moduleNameMapper":{"@code/(.*)":["<rootDir>/golden/$1"]},"preset":"ts-jest","globals":{"ts-jest":{"tsconfig":{"baseUrl":"src","paths":{"@code/*":["../golden/*"]}}}}}

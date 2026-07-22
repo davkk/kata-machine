@@ -3,6 +3,8 @@ const path = require("path");
 const dsa = require("./dsa");
 
 const REVIEW_FILE = path.join(__dirname, "..", ".review-data.json");
+const ACTIVE_FILE = path.join(__dirname, "..", ".active.json");
+const STATS_FILE = path.join(__dirname, "..", "stats.json");
 
 function read_json(file, fallback) {
     try { return JSON.parse(fs.readFileSync(file, "utf-8")); }
@@ -15,7 +17,11 @@ function today_str() {
 
 const all_katas = Object.keys(dsa).sort();
 const reviews = read_json(REVIEW_FILE, {});
+const active = read_json(ACTIVE_FILE, []);
+const session_stats = read_json(STATS_FILE, {});
 const today = today_str();
+
+// --- Stats section ---
 
 const reviewed = Object.keys(reviews);
 const never_reviewed = all_katas.filter(k => !reviews[k]);
@@ -65,6 +71,8 @@ for (const k of reviewed) {
     else ef_buckets["> 3.0"]++;
 }
 
+const max_ef = Math.max(1, ...Object.values(ef_buckets));
+
 console.log("=== Kata Review Stats ===\n");
 console.log(`Total katas:       ${all_katas.length}`);
 console.log(`Reviewed:          ${reviewed.length}`);
@@ -76,16 +84,49 @@ console.log(`Current streak:    ${streak} day${streak !== 1 ? "s" : ""}\n`);
 
 console.log("Easiness buckets:");
 for (const [bucket, count] of Object.entries(ef_buckets)) {
-    const bar = "█".repeat(Math.ceil(count / Math.max(1, ...Object.values(ef_buckets)) * 20));
+    const bar = "█".repeat(Math.ceil(count / max_ef * 20));
     console.log(`  ${bucket}: ${count} ${bar}`);
 }
 console.log();
 
 if (due_now.length > 0) {
-    console.log("Due for review:");
+    console.log("Overdue / due now:");
     for (const k of due_now) {
         const r = reviews[k];
         const due_days = Math.ceil((new Date(today).getTime() - new Date(r.next_review).getTime()) / 86400000);
         console.log(`  ${k} (overdue by ${due_days}d, easiness: ${r.easiness})`);
     }
+    console.log();
 }
+
+// --- Upcoming schedule ---
+
+const by_date = {};
+for (const [kata, data] of Object.entries(reviews)) {
+    if (!data.next_review || data.next_review <= today) continue;
+    const d = data.next_review;
+    if (!by_date[d]) by_date[d] = [];
+    by_date[d].push({ name: kata, interval: data.interval, easiness: data.easiness });
+}
+
+const sorted_upcoming = Object.keys(by_date).sort();
+if (sorted_upcoming.length > 0) {
+    console.log("Upcoming schedule:");
+    for (const date of sorted_upcoming) {
+        console.log(`  ${date}`);
+        for (const k of by_date[date]) {
+            console.log(`    ${k.name.padEnd(16)} interval: ${k.interval}d  easiness: ${k.easiness}`);
+        }
+    }
+    console.log();
+}
+
+// --- Active stats ---
+
+console.log("Active katas (times practiced):");
+for (const k of active) {
+    console.log(`  ${k.padEnd(16)} ${(session_stats[k] || 0)}x`);
+}
+console.log();
+
+console.log(`Session count: ${sorted_dates.length}`);
