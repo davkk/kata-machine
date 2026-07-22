@@ -4,14 +4,18 @@ Daily DSA practice with spaced repetition.
 
 ### Setup
 
+```
 npm install
+```
 
 ### Workflow
 
+```sh
 npm run pick              # pick 5 katas (SR-prioritized)
 npm run generate          # create stub files
-# ... solve the katas in sessions/session1/
+# ... solve the katas in sessions/sessionX/
 npm run complete-day      # run tests + self-assess (0-5)
+```
 
 ### Commands
 
