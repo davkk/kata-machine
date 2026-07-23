@@ -18,7 +18,7 @@
         "review": "node ./scripts/review.js",
         "complete-day": "node ./scripts/complete-day.js",
         "stats": "node ./scripts/stats.js",
-        "session": "echo sessions/session1"
+        "session": "node ./scripts/current-session.js"
     },
     "devDependencies": {
         "@swc-node/register": "^1.6.7",

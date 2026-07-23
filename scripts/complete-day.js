@@ -2,11 +2,12 @@ const { execSync } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 const { sm2 } = require("./sm2");
+const { get_latest_session } = require("./session-helper");
 
 const REVIEW_FILE = path.join(__dirname, "..", ".review-data.json");
 const ACTIVE_FILE = path.join(__dirname, "..", ".active.json");
 const DAILY_AVG_FILE = path.join(__dirname, "..", ".daily-averages.json");
-const SESSION_DIR = path.join(__dirname, "..", "sessions", "session1");
+const SESSION_DIR = path.join(__dirname, "..", "sessions", get_latest_session());
 
 function read_json(file, fallback) {
     try { return JSON.parse(fs.readFileSync(file, "utf-8")); }

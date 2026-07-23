@@ -1,8 +1,9 @@
 const { execSync } = require("child_process");
 const fs = require("fs");
 const path = require("path");
+const { get_latest_session } = require("./session-helper");
 
-const targetDir = path.resolve(process.argv[2] || "sessions/session1");
+const targetDir = path.resolve(process.argv[2] || path.join("sessions", get_latest_session()));
 
 const testPattern = fs.readdirSync(targetDir)
     .filter(f => f.endsWith(".ts"))
